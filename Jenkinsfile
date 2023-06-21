@@ -1,27 +1,30 @@
 node {
+
+    environment {
+        dockerimagename = 'scottiee/demo-flask-pipeline'
+    }
+
     def app
 
     stage('Clone repository') {
-      
-
         checkout scm
     }
 
     stage('Build image') {
-  
-       app = docker.build("scottiee/demo-flask-pipeline")
+        steps {
+            script {
+                sh "docker buildx build --builder wizardly_euclid --platform linux/arm64 -t ${dockerimagename} . --load"
+                dockerImage = docker.image(env.dockerimagename)
+            }
+        }
     }
-
     stage('Test image') {
-  
-
         app.inside {
             sh 'echo "Tests passed"'
         }
     }
 
-    stage('Push image') {
-        
+    stage('Push image') {        
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BUILD_NUMBER}")
         }
