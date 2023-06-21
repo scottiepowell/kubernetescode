@@ -10,6 +10,14 @@ node {
         checkout scm
     }
 
+    stage('Setup buildx') {
+      steps{
+        script {
+          sh 'docker buildx use wizardly_euclid'
+        }
+      }
+    }
+
     stage('Build image') {
         steps {
             script {
