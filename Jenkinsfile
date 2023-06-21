@@ -7,8 +7,14 @@ node {
     def app
 
     stage('Clone repository') {
-        checkout scm
+        steps {
+            script {
+                sh "git clone https://github.com/scottiepowell/kubernetescode.git" // Replace with your repo URL
+                sh "git checkout main" // Replace with your branch name
+            }
+        }
     }
+
 
     stage('Setup buildx') {
       steps{
