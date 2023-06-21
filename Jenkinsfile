@@ -34,9 +34,9 @@ pipeline {
             steps {
                 script {
                     def app = docker.image(env.dockerimagename)
-                    app.run('sleep 10').inside {
+                    app.inside("-d sleep 10") {
                     sh 'echo "Tests passed"'
-                    }
+                        }
                 }
             }
         }
