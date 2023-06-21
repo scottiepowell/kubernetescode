@@ -26,17 +26,27 @@ pipeline {
                     def app
                     sh "docker buildx build --builder wizardly_euclid --platform linux/arm64 -t ${dockerimagename} . --load"
                     app = docker.image(env.dockerimagename)
-                    
-                    stage('Test image') {
-                        app.inside {
-                            sh 'echo "Tests passed"'
-                        }
+                }
+            }
+        }
+        
+        stage('Test image') {
+            steps {
+                script {
+                    def app = docker.image(env.dockerimagename)
+                    app.inside {
+                        sh 'echo "Tests passed"'
                     }
+                }
+            }
+        }
 
-                    stage('Push image') {        
-                        docker.withRegistry('https://registry.hub.docker.com', 'dockerhublogin') {
-                            app.push("${env.BUILD_NUMBER}")
-                        }
+        stage('Push image') {
+            steps {
+                script {
+                    def app = docker.image(env.dockerimagename)
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhublogin') {
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -44,10 +54,11 @@ pipeline {
     }
     
     post {
-    success {
-        script {
-            echo "triggering updatemanifestjob"
-            build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+        success {
+            script {
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
         }
     }
+}
