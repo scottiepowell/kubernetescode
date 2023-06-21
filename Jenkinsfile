@@ -9,8 +9,7 @@ pipeline {
     stage('Clone repository') {
         steps {
             script {
-                sh "git clone https://github.com/scottiepowell/kubernetescode.git" // Replace with your repo URL
-                sh "git checkout main" // Replace with your branch name
+                checkout scm
             }
         }
     }
