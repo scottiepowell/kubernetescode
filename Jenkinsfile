@@ -22,7 +22,7 @@ node {
         steps {
             script {
                 sh "docker buildx build --builder wizardly_euclid --platform linux/arm64 -t ${dockerimagename} . --load"
-                dockerImage = docker.image(env.dockerimagename)
+                app = docker.image = docker.image(env.dockerimagename)
             }
         }
     }
