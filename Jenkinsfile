@@ -34,12 +34,14 @@ pipeline {
             steps {
                 script {
                     def app = docker.image(env.dockerimagename)
-                    app.inside("-d sleep 10") {
+                    app.inside() {
+                    // Replace with your actual test commands
                     sh 'echo "Tests passed"'
-                        }
+                    }
                 }
             }
         }
+
 
         stage('Push image') {
             steps {
