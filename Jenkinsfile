@@ -33,7 +33,8 @@ pipeline {
         stage('Test image') {
             steps {
                 script {
-                    def app = docker.image(env.dockerimagename)
+                    def app
+                    app = docker.image(env.dockerimagename)
                     app.inside {
                         sh 'echo "Tests passed"'
                     }
