@@ -1,4 +1,4 @@
-node {
+pipeline {
 
     environment {
         dockerimagename = 'scottiee/demo-flask-pipeline'
